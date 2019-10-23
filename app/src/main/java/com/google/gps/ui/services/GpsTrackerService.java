@@ -156,7 +156,7 @@ public class GpsTrackerService extends Service implements LocationListener {
     }
 
 
-    public Location getGeoLocation() {
+    public  void getGeoLocation() {
         try {
 
             locationManager = (LocationManager) mContect.getSystemService(LOCATION_SERVICE);
@@ -206,11 +206,10 @@ public class GpsTrackerService extends Service implements LocationListener {
     }catch (Exception e){
      e.getStackTrace();
  }
- return location;
 }
 
 
-    public  static void sendLocationFromServiceToMainActivity(){
+    public  void sendLocationFromServiceToMainActivity(){
 
         Events.ServiceMainActivityLocation serviceMainActivityLocation
                 =new Events.ServiceMainActivityLocation(getFinalLocation());
@@ -219,7 +218,9 @@ public class GpsTrackerService extends Service implements LocationListener {
     }
 
 
-    public static String getFinalLocation(){
+    public String getFinalLocation(){
+
+        getGeoLocation();
 
         Log.e(TAG ,latitude + " , " + longitude  );
 
