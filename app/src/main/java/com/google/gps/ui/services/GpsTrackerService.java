@@ -42,12 +42,11 @@ public class GpsTrackerService extends Service implements LocationListener {
 
     private boolean isGpsEnabled = false;
     private boolean isNetWorkEnabled = false;
-    private boolean canGetLocation = false;
     private static Location location;
     private  static double longitude;
     private  static double latitude;
     private LocationManager locationManager;
-    private Context mContect;
+
 
     public GpsTrackerService() {
 
@@ -156,10 +155,10 @@ public class GpsTrackerService extends Service implements LocationListener {
     }
 
 
-    public  void getGeoLocation() {
+    public  Location getGeoLocation() {
         try {
 
-            locationManager = (LocationManager) mContect.getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
             isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             isNetWorkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -168,7 +167,6 @@ public class GpsTrackerService extends Service implements LocationListener {
                 Toast.makeText(this, "Not Enable", Toast.LENGTH_LONG).show();
             } else {
 
-                this.canGetLocation = true;
                 if (isNetWorkEnabled) {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -206,6 +204,7 @@ public class GpsTrackerService extends Service implements LocationListener {
     }catch (Exception e){
      e.getStackTrace();
  }
+ return location;
 }
 
 
@@ -220,15 +219,13 @@ public class GpsTrackerService extends Service implements LocationListener {
 
     public String getFinalLocation(){
 
-        getGeoLocation();
-
+        if (location !=null){
+            latitude=getGeoLocation().getLatitude();
+            longitude=getGeoLocation().getLongitude();
+        }
         Log.e(TAG ,latitude + " , " + longitude  );
 
-        if (location !=null){
-            latitude=location.getLatitude();
-            longitude=location.getLongitude();
-        }
-        return  latitude+ " , " + longitude ;
+        return  latitude + " , " +  longitude ;
     }
 
 
